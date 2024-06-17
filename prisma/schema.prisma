@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  nome        String
+  email       String
+  senha       String
+  Perfil      Perfil?  @relation(fields: [perfilId], references: [id])
+  dtInclusao  DateTime @default(now())
+  dtAlteracao DateTime @updatedAt
+  perfilId    String?  @db.ObjectId
+  loja        Loja[]
+}
+
+model Perfil {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  descricao   String    @unique
+  usuarios    Usuario[]
+  dtInclusao  DateTime  @default(now())
+  dtAlteracao DateTime  @updatedAt
+}
+
+model Produto {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  nome        String
+  valor       Float
+  quantidade  Int
+  Loja        Loja?    @relation(fields: [lojaId], references: [id])
+  lojaId      String?  @db.ObjectId
+  dtInclusao  DateTime @default(now())
+  dtAlteracao DateTime @updatedAt
+}
+
+model Loja {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  nome        String
+  Itens       Produto[]
+  dtInclusao  DateTime  @default(now())
+  dtAlteracao DateTime  @updatedAt
+  Usuario     Usuario?  @relation(fields: [usuarioId], references: [id])
+  usuarioId   String?   @db.ObjectId
+}
