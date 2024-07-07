@@ -1,24 +1,37 @@
 import { Router } from "express";
-import { criarUsuario } from "./controller/UsuarioController";
-import { criarPerfil, listarPerfis } from "./controller/PerfilController";
-import { criarLoja } from "./controller/LojaController";
-import { criarItem, listarTodosProdutos } from "./controller/ProdutosController";
 
+import {
+  criarPedido
+} from "./controller/PedidoController";
+
+import {
+  criarUsuario
+} from "./controller/UsuarioController";
+import { atualizarItem, criarItem } from "./controller/ProdutoController";
 
 export const router = Router();
 
-router.get( "/", (request, response) => {
-	return ( response.json({versao: "0.0.1"}) )
-});
+/**
+ * Rotas do usuário
+ */
+router.post("/user", criarUsuario);
 
-router.post( "/usuario", criarUsuario);
+/**
+ * Rotas do produto
+ */
+router.post(
+  "/criarProduto",
+  criarItem
+);
+router.put(
+  "/atualizarItem/:productId",
+  atualizarItem
+);
 
-
-
-router.post( "/perfil", criarPerfil);
-router.get( "/listarPerfis", listarPerfis);
-
-
-router.post( "/loja/:usuarioId", criarLoja);
-router.post( "/loja/novoProduto/:lojaId", criarItem);
-router.get( "/loja/listarProdutos/:lojaId", listarTodosProdutos);
+/**
+ * Rotas da venda
+ */
+router.post(
+  "/criarPedido",
+  criarPedido
+);

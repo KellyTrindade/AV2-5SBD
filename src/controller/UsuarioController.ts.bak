@@ -1,0 +1,15 @@
+import { Request, Response } from "express";
+import { prisma } from "../database/prisma";
+
+export const criarUsuario = async (request: Request, response: Response) => {
+	const { nome, email } = request.body;
+
+	const novoUsuario = await prisma.usuario.create({
+		data: { nome, email },
+		select: {
+			id: true
+		}
+	});
+
+	return ( response.json(novoUsuario) );
+};
